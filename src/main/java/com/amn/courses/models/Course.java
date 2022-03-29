@@ -34,6 +34,11 @@ public class Course {
 
     public Course() {
     }
+    public Course(Integer id, String name, User user) {
+        this.id = id;
+        this.name = name;
+        this.instructor = user;
+    }
 
     public Integer getId() {
         return id;
