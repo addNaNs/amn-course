@@ -52,7 +52,9 @@ public class CourseController {
     }
 
     @PostMapping(path = "/enroll")
-    public @ResponseBody String enrollToCourse(@RequestBody Integer user_id, @RequestBody Integer course_id){
+    public @ResponseBody String enrollToCourse(@RequestBody ObjectNode json){
+        Integer user_id = json.get("user_id").asInt();
+        Integer course_id = json.get("course_id").asInt();
         Optional<User> u = userRepository.findById(user_id).stream().findFirst();
         User user;
         if(u.isEmpty()){
