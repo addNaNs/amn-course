@@ -4,6 +4,7 @@ import com.amn.courses.dto.CourseRepository;
 import com.amn.courses.dto.UserRepository;
 import com.amn.courses.models.Course;
 import com.amn.courses.models.User;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,9 @@ public class CourseController {
 
     @PostMapping(path="")
     public @ResponseBody
-    String addNewCourse (
-            @RequestParam String name,
-            @RequestParam Integer instructorId
-    ) {
+    String addNewCourse (@RequestBody ObjectNode json) {
+        String name = json.get("name").asText();
+        Integer instructorId = json.get("instructorId").asInt();
         Course n = new Course();
         n.setName(name);
         n.setInstructor(userRepository.findById(instructorId).get());
@@ -52,10 +52,7 @@ public class CourseController {
     }
 
     @PostMapping(path = "/enroll")
-    public @ResponseBody String enrollToCourse(
-            @RequestParam Integer user_id,
-            @RequestParam Integer course_id
-    ){
+    public @ResponseBody String enrollToCourse(@RequestBody Integer user_id, @RequestBody Integer course_id){
         Optional<User> u = userRepository.findById(user_id).stream().findFirst();
         User user;
         if(u.isEmpty()){
