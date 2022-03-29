@@ -45,10 +45,8 @@ public class CourseController {
         return courseRepository.findAll();
     }
 
-    @DeleteMapping(path="")
-    public @ResponseBody String deleteCourse(
-            @RequestParam Integer id
-    ) {
+    @DeleteMapping(path="{id}")
+    public @ResponseBody String deleteCourse(@PathVariable(value="id") Integer id) {
         courseRepository.deleteById(id);
         return "Deleted";
     }
