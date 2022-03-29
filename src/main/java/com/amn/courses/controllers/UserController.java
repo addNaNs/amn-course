@@ -16,29 +16,18 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping(path="") // Map ONLY POST Requests
-    public @ResponseBody String addNewUser (
-            @RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String username,
-            @RequestParam String password
-    ) {
+    public @ResponseBody String addNewUser (@RequestBody User user) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        User n = new User();
-        n.setName(name);
-        n.setEmail(email);
-        n.setUsername(username);
-        n.setPassword(password);
-
-        for (User user : userRepository.findAll()) {
-            if(user.getUsername().equals(n.getUsername())){
+        for (User u : userRepository.findAll()) {
+            if(u.getUsername().equals(user.getUsername())){
                 ResponseEntity.status(HttpStatus.BAD_REQUEST);
                 return "No double usernames";
             }
         }
 
-        userRepository.save(n);
+        userRepository.save(user);
         return "Saved";
     }
 
@@ -48,10 +37,8 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @DeleteMapping(path="")
-    public @ResponseBody String deleteUser(
-            @RequestParam Integer id
-    ) {
+    @DeleteMapping(path="/{id}")
+    public @ResponseBody String deleteUser(@PathVariable(value="id") Integer id) {
         userRepository.deleteById(id);
         return "Deleted";
     }
