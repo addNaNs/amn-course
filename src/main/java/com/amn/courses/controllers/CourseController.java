@@ -39,8 +39,9 @@ public class CourseController {
         n.setInstructor(userRepository.findById(instructorId).get());
 
         if(userRepository.findById(instructorId).isEmpty()){
-            ResponseEntity.status(HttpStatus.BAD_REQUEST);
-            return "No instructor with that ID";
+            JSONObject entity = new JSONObject();
+            entity.put("message","No instructor with that ID");
+            return new ResponseEntity<Object>(entity,HttpStatus.OK);
         }
 
         courseRepository.save(n);
