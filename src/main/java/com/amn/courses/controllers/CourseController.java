@@ -89,7 +89,13 @@ public class CourseController {
             return new ResponseEntity<Object>(entity,HttpStatus.BAD_REQUEST);
         }
         course = c.get();
-
+        for (Course c1 : user.getCourses()) {
+            if(c1.equals(course)) {
+                JSONObject entity = new JSONObject();
+                entity.put("message","User is already enrolled");
+                return new ResponseEntity<Object>(entity,HttpStatus.BAD_REQUEST);
+            }
+        }
         user.getCourses().add(course);
         userRepository.save(user);
         JSONObject entity = new JSONObject();
